@@ -17,11 +17,24 @@ const AlumniDetail = ({ alumniId, onClose, onUpdate }) => {
   const fetchAlumniDetail = async () => {
     try {
       const token = localStorage.getItem('adminToken');
+      console.log('Fetching alumni detail for ID:', alumniId); // Debug log
+      
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/alumni/${alumniId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      const data = await response.json();
-      setAlumni(data);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Alumni detail received:', data); // Debug log
+        
+        // Handle different response formats
+        const alumniData = data.data || data;
+        setAlumni(alumniData);
+      } else {
+        console.error('Failed to fetch alumni detail:', response.status);
+        const errorData = await response.json();
+        console.error('Error data:', errorData);
+      }
     } catch (error) {
       console.error('Error fetching alumni detail:', error);
     } finally {
@@ -33,8 +46,8 @@ const AlumniDetail = ({ alumniId, onClose, onUpdate }) => {
     setUpdating(true);
     try {
       const token = localStorage.getItem('adminToken');
-      await fetch(`${import.meta.env.VITE_API_URL}/api/alumni/${alumniId}/status`, {
-        method: 'PUT',
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/alumni/${alumniId}/status`, {
+        method: 'PATCH', // เปลี่ยนจาก PUT เป็น PATCH
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -42,10 +55,18 @@ const AlumniDetail = ({ alumniId, onClose, onUpdate }) => {
         body: JSON.stringify({ status: newStatus })
       });
       
-      setAlumni({...alumni, status: newStatus});
-      onUpdate();
+      if (response.ok) {
+        setAlumni({...alumni, status: newStatus});
+        onUpdate();
+        showToast(`อัปเดตสถานะเป็น "${newStatus}" แล้ว`, 'success');
+      } else {
+        const errorData = await response.json();
+        console.error('Failed to update status:', errorData);
+        showToast('ไม่สามารถอัปเดตสถานะได้', 'error');
+      }
     } catch (error) {
       console.error('Error updating status:', error);
+      showToast('เกิดข้อผิดพลาดในการอัปเดตสถานะ', 'error');
     } finally {
       setUpdating(false);
     }
@@ -55,8 +76,8 @@ const AlumniDetail = ({ alumniId, onClose, onUpdate }) => {
     setUpdating(true);
     try {
       const token = localStorage.getItem('adminToken');
-      await fetch(`${import.meta.env.VITE_API_URL}/api/alumni/${alumniId}/position`, {
-        method: 'PUT',
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/alumni/${alumniId}/position`, {
+        method: 'PATCH', // เปลี่ยนจาก PUT เป็น PATCH
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -64,13 +85,51 @@ const AlumniDetail = ({ alumniId, onClose, onUpdate }) => {
         body: JSON.stringify({ position: newPosition })
       });
       
-      setAlumni({...alumni, position: newPosition});
-      onUpdate();
+      if (response.ok) {
+        setAlumni({...alumni, position: newPosition});
+        onUpdate();
+        showToast(`อัปเดตตำแหน่งเป็น "${newPosition}" แล้ว`, 'success');
+      } else {
+        const errorData = await response.json();
+        console.error('Failed to update position:', errorData);
+        showToast('ไม่สามารถอัปเดตตำแหน่งได้', 'error');
+      }
     } catch (error) {
       console.error('Error updating position:', error);
+      showToast('เกิดข้อผิดพลาดในการอัปเดตตำแหน่ง', 'error');
     } finally {
       setUpdating(false);
     }
+  };
+
+  // Simple toast function
+  const showToast = (message, type = 'info') => {
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      z-index: 10000;
+      animation: slideIn 0.3s ease;
+      ${type === 'success' ? 'background: #28a745;' : 
+        type === 'error' ? 'background: #dc3545;' : 
+        'background: #17a2b8;'}
+    `;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      toast.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => {
+        if (document.body.contains(toast)) {
+          document.body.removeChild(toast);
+        }
+      }, 300);
+    }, 3000);
   };
 
   const openImageModal = (imageUrl) => {
@@ -157,7 +216,7 @@ const AlumniDetail = ({ alumniId, onClose, onUpdate }) => {
                     <div className="control-field">
                       <label>สถานะ</label>
                       <select
-                        value={alumni.status}
+                        value={alumni.status || 'รอตรวจสอบ'}
                         onChange={(e) => updateStatus(e.target.value)}
                         disabled={updating}
                         className="control-select"
@@ -171,7 +230,7 @@ const AlumniDetail = ({ alumniId, onClose, onUpdate }) => {
                     <div className="control-field">
                       <label>ตำแหน่งในสมาคม</label>
                       <select
-                        value={alumni.position}
+                        value={alumni.position || 'สมาชิกสามัญ'}
                         onChange={(e) => updatePosition(e.target.value)}
                         disabled={updating}
                         className="control-select"

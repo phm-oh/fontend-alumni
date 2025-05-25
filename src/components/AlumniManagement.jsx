@@ -12,29 +12,72 @@ const AlumniManagement = ({ user, onLogout, onViewDetail }) => {
 
   useEffect(() => {
     fetchAlumni();
-  }, [currentPage, searchTerm, filterStatus, filterDepartment]);
+  }, [currentPage]);
+
+  // Separate useEffect for filters with debounce
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setCurrentPage(1); // Reset to first page when filtering
+      fetchAlumni();
+    }, 500); // 500ms debounce
+
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm, filterStatus, filterDepartment]);
 
   const fetchAlumni = async () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('adminToken');
-      const params = new URLSearchParams({
-        page: currentPage,
-        limit: 10,
-        ...(searchTerm && { search: searchTerm }),
-        ...(filterStatus && { status: filterStatus }),
-        ...(filterDepartment && { department: filterDepartment })
-      });
+      
+      // Build query parameters
+      const queryParams = new URLSearchParams();
+      queryParams.append('page', currentPage.toString());
+      queryParams.append('limit', '10');
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/alumni?${params}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
+      // Add search parameters only if they have values
+      if (searchTerm.trim()) {
+        queryParams.append('search', searchTerm.trim());
+      }
+      if (filterStatus) {
+        queryParams.append('status', filterStatus);
+      }
+      if (filterDepartment) {
+        queryParams.append('department', filterDepartment);
+      }
+
+      const url = `${import.meta.env.VITE_API_URL}/api/alumni?${queryParams.toString()}`;
+      console.log('Fetching alumni from URL:', url); // Debug log
+
+      const response = await fetch(url, {
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
       });
       
-      const data = await response.json();
-      setAlumni(data.data || []);
-      setTotalPages(data.totalPages || 1);
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Alumni response:', data); // Debug log
+        
+        // Handle different response formats
+        const alumniData = data.data || data.alumni || [];
+        const totalPages = data.totalPages || Math.ceil((data.total || alumniData.length) / 10);
+        
+        setAlumni(alumniData);
+        setTotalPages(totalPages);
+      } else {
+        console.error('Failed to fetch alumni:', response.status);
+        const errorData = await response.json();
+        console.error('Error response:', errorData);
+        
+        // Show error message but don't break the UI
+        setAlumni([]);
+        setTotalPages(1);
+      }
     } catch (error) {
       console.error('Error fetching alumni:', error);
+      setAlumni([]);
+      setTotalPages(1);
     } finally {
       setLoading(false);
     }
@@ -43,8 +86,10 @@ const AlumniManagement = ({ user, onLogout, onViewDetail }) => {
   const updateStatus = async (alumniId, newStatus) => {
     try {
       const token = localStorage.getItem('adminToken');
-      await fetch(`${import.meta.env.VITE_API_URL}/api/alumni/${alumniId}/status`, {
-        method: 'PUT',
+      console.log('Updating alumni status:', alumniId, newStatus); // Debug log
+      
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/alumni/${alumniId}/status`, {
+        method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -52,10 +97,56 @@ const AlumniManagement = ({ user, onLogout, onViewDetail }) => {
         body: JSON.stringify({ status: newStatus })
       });
       
-      fetchAlumni(); // Refresh data
+      console.log('Status update response:', response.status); // Debug log
+      
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log('Status update success:', responseData);
+        fetchAlumni(); // Refresh data
+        showToast(`อัปเดตสถานะเป็น "${newStatus}" แล้ว`, 'success');
+      } else {
+        const errorData = await response.json();
+        console.error('Failed to update status:', errorData);
+        showToast(errorData.message || 'ไม่สามารถอัปเดตสถานะได้', 'error');
+      }
     } catch (error) {
       console.error('Error updating status:', error);
+      showToast('เกิดข้อผิดพลาดในการอัปเดตสถานะ', 'error');
     }
+  };
+
+  // Simple toast function
+  const showToast = (message, type = 'info') => {
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      z-index: 10000;
+      animation: slideIn 0.3s ease;
+      ${type === 'success' ? 'background: #28a745;' : 
+        type === 'error' ? 'background: #dc3545;' : 
+        'background: #17a2b8;'}
+    `;
+    toast.textContent = message;
+    
+    // Add to DOM
+    document.body.appendChild(toast);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+      toast.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => {
+        if (document.body.contains(toast)) {
+          document.body.removeChild(toast);
+        }
+      }, 300);
+    }, 3000);
   };
 
   const handleClearFilters = () => {
@@ -63,6 +154,7 @@ const AlumniManagement = ({ user, onLogout, onViewDetail }) => {
     setFilterStatus('');
     setFilterDepartment('');
     setCurrentPage(1);
+    // fetchAlumni will be called automatically by useEffect
   };
 
   const getStatusSelectClass = (status) => {
@@ -83,7 +175,9 @@ const AlumniManagement = ({ user, onLogout, onViewDetail }) => {
             <h1 className="admin-header-title">จัดการศิษย์เก่า</h1>
           </div>
           <div className="admin-header-user">
-            <span className="admin-user-info">สวัสดี, {user.name}</span>
+            <span className="admin-user-info">
+              สวัสดี, {user?.username || user?.name || user?.email || 'ผู้ดูแลระบบ'}
+            </span>
             <button
               onClick={onLogout}
               className="admin-logout-btn"
@@ -184,9 +278,9 @@ const AlumniManagement = ({ user, onLogout, onViewDetail }) => {
                         <td>{item.graduationYear}</td>
                         <td>
                           <select
-                            value={item.status}
+                            value={item.status || 'รอตรวจสอบ'}
                             onChange={(e) => updateStatus(item._id, e.target.value)}
-                            className={getStatusSelectClass(item.status)}
+                            className={getStatusSelectClass(item.status || 'รอตรวจสอบ')}
                           >
                             <option value="รอตรวจสอบ">รอตรวจสอบ</option>
                             <option value="อนุมัติ">อนุมัติ</option>

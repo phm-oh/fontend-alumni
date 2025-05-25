@@ -1,13 +1,14 @@
-// src/components/AdminLogin.jsx
+// src/components/AdminLogin.jsx - Fixed Email + Password Toggle
 import React, { useState } from 'react';
 
 const AdminLogin = ({ onLogin, onBackToPublic }) => {
   const [formData, setFormData] = useState({
-    username: '',
+    email: '', // เปลี่ยนจาก username เป็น email
     password: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // เพิ่มสำหรับ toggle password
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +21,10 @@ const AdminLogin = ({ onLogin, onBackToPublic }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          email: formData.email,    // ส่ง email แทน username
+          password: formData.password
+        }),
       });
 
       const data = await response.json();
@@ -73,29 +77,63 @@ const AdminLogin = ({ onLogin, onBackToPublic }) => {
 
         <form onSubmit={handleSubmit} className="admin-login-form">
           <div className="form-group">
-            <label htmlFor="username">ชื่อผู้ใช้</label>
+            <label htmlFor="email">อีเมล</label>
             <input
-              type="text"
-              id="username"
-              name="username"
+              type="email"
+              id="email"
+              name="email"
               required
-              value={formData.username}
+              value={formData.email}
               onChange={handleInputChange}
-              placeholder="กรอกชื่อผู้ใช้"
+              placeholder="กรอกอีเมล"
             />
           </div>
 
           <div className="form-group">
             <label htmlFor="password">รหัสผ่าน</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              required
-              value={formData.password}
-              onChange={handleInputChange}
-              placeholder="กรอกรหัสผ่าน"
-            />
+            <div style={{ position: 'relative' }}>
+              <input
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                name="password"
+                required
+                value={formData.password}
+                onChange={handleInputChange}
+                placeholder="กรอกรหัสผ่าน"
+                style={{ paddingRight: '45px' }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: 'absolute',
+                  right: '12px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: 'var(--text-muted)',
+                  padding: '4px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                {showPassword ? (
+                  // Eye Slash Icon (ซ่อนรหัส)
+                  <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
+                  </svg>
+                ) : (
+                  // Eye Icon (แสดงรหัส)
+                  <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
 
           <button

@@ -18,16 +18,38 @@ const AdminDashboard = ({ user, onLogout }) => {
       const statsRes = await fetch(`${import.meta.env.VITE_API_URL}/api/alumni/statistics`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      const statsData = await statsRes.json();
       
-      // Fetch recent alumni
-      const alumniRes = await fetch(`${import.meta.env.VITE_API_URL}/api/alumni?limit=5&sort=createdAt_desc`, {
+      if (statsRes.ok) {
+        const statsData = await statsRes.json();
+        console.log('Stats data received:', statsData); // Debug log
+        
+        const parsedStats = {
+          total: statsData.data?.totalAlumni || 0,
+          pending: statsData.data?.statusStats?.pending || 0,
+          approved: statsData.data?.statusStats?.approved || 0,
+          rejected: statsData.data?.statusStats?.cancelled || 0
+        };
+        
+        console.log('Parsed stats:', parsedStats); // Debug log
+        setStats(parsedStats);
+      }
+      
+      // Fetch recent alumni - แก้ sort parameter
+      const alumniRes = await fetch(`${import.meta.env.VITE_API_URL}/api/alumni?limit=5`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      const alumniData = await alumniRes.json();
       
-      setStats(statsData);
-      setRecentAlumni(alumniData.data || []);
+      if (alumniRes.ok) {
+        const alumniData = await alumniRes.json();
+        console.log('Alumni data received:', alumniData); // Debug log
+        
+        // Sort client-side if needed
+        const sortedAlumni = (alumniData.data || []).sort((a, b) => 
+          new Date(b.createdAt) - new Date(a.createdAt)
+        ).slice(0, 5);
+        
+        setRecentAlumni(sortedAlumni);
+      }
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
     } finally {
@@ -85,7 +107,9 @@ const AdminDashboard = ({ user, onLogout }) => {
             </h1>
           </div>
           <div className="admin-header-user">
-            <span className="admin-user-info">สวัสดี, {user.name}</span>
+            <span className="admin-user-info">
+              สวัสดี, {user?.username || user?.name || user?.email || 'ผู้ดูแลระบบ'}
+            </span>
             <button
               onClick={onLogout}
               className="admin-logout-btn"
