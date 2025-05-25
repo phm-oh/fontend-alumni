@@ -42,7 +42,7 @@ const LandingPage = ({ onNavigate }) => {
 
       <div className="features-section">
         <div className="container">
-          <h2 className="section-title">บริการของเรา</h2>
+          <h2 className="section-title">ชมรมศิษย์เก่าวิทยาลัยอาชีวศึกษาอุดรธานี</h2>
           <div className="features-grid">
             <div className="feature-card">
               <div className="feature-icon">🎓</div>
@@ -51,8 +51,8 @@ const LandingPage = ({ onNavigate }) => {
             </div>
             <div className="feature-card">
               <div className="feature-icon">💳</div>
-              <h3>ชำระเงินสะดวก</h3>
-              <p>รองรับการชำระเงินหลายช่องทาง และตรวจสอบสถานะได้ตลอดเวลา</p>
+              <h3>บริจาค</h3>
+              <p>บริจาคทุนการศึกษา พัฒนาสถานศึกษา สถานที่ เครื่องมือในการเรียนการสอน </p>
             </div>
             <div className="feature-card">
               <div className="feature-icon">🤝</div>
