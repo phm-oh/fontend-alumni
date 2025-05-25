@@ -87,12 +87,7 @@ const StatusCheck = ({ onNavigate, initialIdCard = '' }) => {
             ← กลับหน้าหลัก
           </button>
           <div className="header-logo">
-            <SafeImage 
-              src={config.imageLogo} 
-              alt="โลโก้วิทยาลัย" 
-              className="page-logo"
-              fallback={<div className="page-logo-placeholder">🏫</div>}
-            />
+
           </div>
           <h1>ตรวจสอบสถานะ</h1>
           <h2>{config.collegeName}</h2>

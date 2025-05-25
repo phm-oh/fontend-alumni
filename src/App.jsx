@@ -137,7 +137,7 @@ const Footer = () => (
           <h4>ติดต่อเรา</h4>
           <p>โทร: {config.collegePhone}</p>
           <p>อีเมล: alumni@utc.ac.th</p>
-          <p>เว็บไซต์: www.utc.ac.th</p>
+          <p>เว็บไซต์: www.udvc.ac.th</p>
         </div>
         <div className="footer-section">
           <h4>ลิงก์ที่เป็นประโยชน์</h4>

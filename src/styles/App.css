@@ -72,12 +72,12 @@
   
   --text-primary: #333333;
   --text-secondary: #666666;
-  --text-muted: #999999;
+  --text-muted: #a38961;
   --text-white: #ffffff;
   
   --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --bg-light: #e9ecef;
+  --bg-secondary: #edd8b7;
+  --bg-light: #f1ecf1;
   --bg-dark: #343a40;
   
   --border-color: #dee2e6;
@@ -101,6 +101,8 @@
   --spacing-lg: 1.5rem;
   --spacing-xl: 2rem;
   --spacing-2xl: 3rem;
+    /* Hero background - will be set dynamically */
+  --hero-bg-url: '';
 }
 
 /* Google Fonts Import */
@@ -136,6 +138,9 @@ body {
 
 .main-content {
   flex: 1;
+  min-height: calc(100vh - 120px); /* ลดจาก 200px เป็น 120px */
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
@@ -304,13 +309,14 @@ body {
 
 /* Page Layouts */
 .page {
-  min-height: calc(100vh - 200px);
+  min-height: auto; /* เปลี่ยนจาก calc(100vh - 200px) */
+  padding-bottom: var(--spacing-2xl); /* เพิ่ม padding ล่าง */
 }
 
 .page-header {
   text-align: center;
-  margin-bottom: var(--spacing-2xl);
-  padding: var(--spacing-2xl) 0;
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-lg) 0;
 }
 
 .page-header .header-logo {
@@ -350,10 +356,42 @@ body {
 }
 
 .hero-section {
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  position: relative;
+  /* background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); */
+  background-image: var(--hero-bg-url); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   color: var(--text-white);
   padding: var(--spacing-2xl) 0;
   text-align: center;
+  min-height: 60vh; /* เพิ่มความสูงให้สวย */
+  display: flex;
+  align-items: center;
+}
+
+/* เพิ่ม overlay เพื่อให้ text เด่น */
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg, 
+    rgba(139, 69, 19, 0.1) 0%,    /* สีน้ำตาลใส */
+    rgba(218, 165, 32, 0.1) 50%,  /* สีทองใส */
+    rgba(139, 69, 19, 0.1) 100%   /* สีน้ำตาลใส */
+  );
+  backdrop-filter: blur(1px); /* เบลอนิดหน่อย */
+  z-index: 1;
+}
+
+/* ทำให้ content อยู่บน overlay */
+.hero-section .container {
+  position: relative;
+  z-index: 2;
 }
 
 .hero-content {
@@ -361,8 +399,15 @@ body {
   margin: 0 auto;
 }
 
-.hero-logo {
-  margin-bottom: var(--spacing-xl);
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-2xl);
+  background: rgba(0, 0, 0, 0.2); /* พื้นหลังดำใสเล็กน้อย */
+  border-radius: 20px;
+  backdrop-filter: blur(10px); /* เบลอพื้นหลัง */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .college-logo {
@@ -500,8 +545,11 @@ body {
   padding: var(--spacing-2xl);
   border-radius: var(--border-radius);
   text-align: center;
-  
   box-shadow: var(--box-shadow);
+  display: flex; /* เพิ่ม */
+  flex-direction: column; /* เพิ่ม */
+  align-items: center; /* เพิ่ม */
+  justify-content: center; /* เพิ่ม */
 }
 
 .gift-preview h3 {
@@ -511,12 +559,13 @@ body {
 }
 
 .gift-image {
-  max-width: 300px;
+  max-width: 400px; /* เพิ่มจาก 300px เป็น 400px */
   width: 100%;
   height: auto;
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
-  margin-bottom: var(--spacing-lg);
+  margin: 0 auto var(--spacing-lg); /* เพิ่ม margin: 0 auto */
+  display: block; /* เพิ่ม display: block */
   transition: transform 0.3s ease;
 }
 
@@ -776,7 +825,7 @@ body {
   max-width: 500px;
   margin: 0 auto;
   background: var(--bg-primary);
-  padding: var(--spacing-2xl);
+  padding: var(--spacing-xl);
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
   text-align: center;
@@ -784,7 +833,7 @@ body {
 
 .result-section {
   max-width: 800px;
-  margin: var(--spacing-2xl) auto 0;
+  margin: var(--spacing-lg) auto var(--spacing-2xl);
 }
 
 .result-card {
@@ -792,6 +841,7 @@ body {
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
   overflow: hidden;
+  margin-bottom: var(--spacing-xl);
 }
 
 .result-header {
@@ -949,10 +999,16 @@ body {
     gap: var(--spacing-sm);
   }
   
-  .nav-logo {
-    width: 40px;
-    height: 40px;
-  }
+.nav-logo {
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
+  border-radius: 12px; /* เปลี่ยนเป็นมุมโค้งนิดหน่อย */
+  background: rgba(255, 255, 255, 0.9); /* เพิ่มความขาวให้เด่นขึ้น */
+  padding: 4px; /* ลด padding เพื่อให้รูปใหญ่ขึ้น */
+  border: 2px solid rgba(255, 255, 255, 0.3); /* เพิ่มขอบนิดหน่อย */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* เพิ่มเงา */
+}
   
   .nav-text h1 {
     font-size: var(--font-size-base);
@@ -979,14 +1035,26 @@ body {
   }
   
   .college-logo {
-    width: 80px;
-    height: 80px;
-  }
+  width: 130px;
+  height: 130px;
+  object-fit: contain;
+  border-radius: 20px; /* มุมโค้งสวยๆ แต่ไม่ตัดรูป */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); /* เงาสวยขึ้น */
+  background: rgba(255, 255, 255, 0.95); /* พื้นหลังขาวใส */
+  padding: 8px; /* padding พอดี */
+  border: 3px solid rgba(255, 255, 255, 0.5); /* ขอบขาวใส */
+}
   
-  .page-logo {
-    width: 60px;
-    height: 60px;
-  }
+ .page-logo {
+  width: 85px;
+  height: 85px;
+  object-fit: contain;
+  border-radius: 15px; /* มุมโค้งสวย */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 6px;
+  border: 2px solid var(--border-color);
+}
   
   .form-grid {
     grid-template-columns: 1fr;
@@ -1058,7 +1126,8 @@ body {
   }
   
   .form-section {
-    padding: var(--spacing-lg);
+    padding: var(--spacing-lg) var(--spacing-xl); /* ลด padding */
+  border-bottom: 1px solid var(--border-color);
   }
   
   .page-header {
@@ -1154,7 +1223,7 @@ textarea:focus,
   .result-card,
   .form-container {
     box-shadow: none !important;
-    border: 1px solid #ccc !important;
+    border: 1px solid #635c5c !important;
   }
 }
 

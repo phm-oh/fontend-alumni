@@ -1,37 +1,37 @@
 // src/components/LandingPage.jsx - Landing Page Component
-import React from 'react';
-import { config } from '../utils/config';
-import SafeImage from './SafeImage';
+import React from "react";
+import { config } from "../utils/config";
+import SafeImage from "./SafeImage";
 
 const LandingPage = ({ onNavigate }) => {
+  // Set hero background image dynamically
+  const heroStyle = {
+    backgroundImage: `url(${config.cloudinary_hero_url})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat'
+  };
+
   return (
     <div className="page landing-page">
-      <div className="hero-section">
+      <div className="hero-section" style={heroStyle}>
         <div className="container">
           <div className="hero-content">
-            <div className="hero-logo">
-              <SafeImage 
-                src={config.cloudinary_logo_url} 
-                alt="โลโก้วิทยาลัย" 
-                className="college-logo"
-                fallback={<div className="college-logo-placeholder">🏫</div>}
-              />
-            </div> 
             <h1 className="hero-title">{config.appName}</h1>
             <h2 className="college-name">{config.collegeName}</h2>
             <p className="hero-subtitle">
               เชื่อมโยงสายใยศิษย์เก่า สืบสานประเพณี และร่วมพัฒนาสถาบัน
             </p>
             <div className="hero-actions">
-              <button 
+              <button
                 className="btn btn-primary btn-large"
-                onClick={() => onNavigate('register')}
+                onClick={() => onNavigate("register")}
               >
                 ลงทะเบียนศิษย์เก่า
               </button>
-              <button 
+              <button
                 className="btn btn-outline btn-large"
-                onClick={() => onNavigate('check-status')}
+                onClick={() => onNavigate("check-status")}
               >
                 ตรวจสอบสถานะ
               </button>
@@ -42,7 +42,9 @@ const LandingPage = ({ onNavigate }) => {
 
       <div className="features-section">
         <div className="container">
-          <h2 className="section-title">ชมรมศิษย์เก่าวิทยาลัยอาชีวศึกษาอุดรธานี</h2>
+          <h2 className="section-title">
+            ชมรมศิษย์เก่าวิทยาลัยอาชีวศึกษาอุดรธานี
+          </h2>
           <div className="features-grid">
             <div className="feature-card">
               <div className="feature-icon">🎓</div>
@@ -52,7 +54,10 @@ const LandingPage = ({ onNavigate }) => {
             <div className="feature-card">
               <div className="feature-icon">📚💝🙏🎁</div>
               <h3>บริจาค</h3>
-              <p>บริจาคทุนการศึกษา พัฒนาสถานศึกษา สถานที่ เครื่องมือในการเรียนการสอน </p>
+              <p>
+                บริจาคทุนการศึกษา พัฒนาสถานศึกษา สถานที่
+                เครื่องมือในการเรียนการสอน{" "}
+              </p>
             </div>
             <div className="feature-card">
               <div className="feature-icon">🤝</div>
@@ -83,14 +88,16 @@ const LandingPage = ({ onNavigate }) => {
                 <p>สำหรับการจัดส่งทางไปรษณีย์</p>
               </div>
             </div>
-            
+
             <div className="gift-preview">
               <h3>ของที่ระลึก</h3>
-              <SafeImage 
-                src={config.cloudinary_gift_url} 
-                alt="ของที่ระลึกสำหรับสมาชิก" 
+              <SafeImage
+                src={config.cloudinary_gift_url}
+                alt="ของที่ระลึกสำหรับสมาชิก"
                 className="gift-image"
-                fallback={<div className="gift-placeholder">🎁 ของที่ระลึก</div>}
+                fallback={
+                  <div className="gift-placeholder">🎁 ของที่ระลึก</div>
+                }
               />
               <p>ของที่ระลึกพิเศษสำหรับสมาชิกศิษย์เก่า</p>
             </div>

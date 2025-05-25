@@ -1,7 +1,7 @@
 // src/components/AlumniRegistration.jsx - Alumni Registration Form Component
 import React, { useState } from 'react';
 import { config, mockData } from '../utils/config';
-import SafeImage from './SafeImage';
+
 import { useAppContext } from '../App';
 
 const AlumniRegistration = ({ onNavigate }) => {
@@ -207,12 +207,7 @@ const AlumniRegistration = ({ onNavigate }) => {
             ← กลับหน้าหลัก
           </button>
           <div className="header-logo">
-            <SafeImage 
-              src={config.imageLogo} 
-              alt="โลโก้วิทยาลัย" 
-              className="page-logo"
-              fallback={<div className="page-logo-placeholder">🏫</div>}
-            />
+
           </div>
           <h1>ลงทะเบียนศิษย์เก่า</h1>
           <h2>{config.collegeName}</h2>
