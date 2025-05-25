@@ -60,6 +60,8 @@ export const config = {
   collegeAddress: import.meta.env.VITE_COLLEGE_ADDRESS,
   collegePhone: import.meta.env.VITE_COLLEGE_PHONE,
   devName: import.meta.env.VITE_DEV_NAME,
+  cloudinary_logo_url:import.meta.env.VITE_IMAGE_LOGO_URL_CLOUDINARY,
+  cloudinary_gift_url:import.meta.env.VITE_IMAGE_GIFT_URL_CLOUDINARY,
   
   // Google Drive File IDs
   logoFileId: import.meta.env.VITE_IMAGE_LOGO_FILE_ID,

@@ -11,12 +11,12 @@ const LandingPage = ({ onNavigate }) => {
           <div className="hero-content">
             <div className="hero-logo">
               <SafeImage 
-                src={config.imageLogo} 
+                src={config.cloudinary_logo_url} 
                 alt="โลโก้วิทยาลัย" 
                 className="college-logo"
                 fallback={<div className="college-logo-placeholder">🏫</div>}
               />
-            </div>
+            </div> 
             <h1 className="hero-title">{config.appName}</h1>
             <h2 className="college-name">{config.collegeName}</h2>
             <p className="hero-subtitle">
@@ -87,7 +87,7 @@ const LandingPage = ({ onNavigate }) => {
             <div className="gift-preview">
               <h3>ของที่ระลึก</h3>
               <SafeImage 
-                src={config.imageGift} 
+                src={config.cloudinary_gift_url} 
                 alt="ของที่ระลึกสำหรับสมาชิก" 
                 className="gift-image"
                 fallback={<div className="gift-placeholder">🎁 ของที่ระลึก</div>}

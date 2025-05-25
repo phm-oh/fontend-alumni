@@ -33,9 +33,9 @@ const Navigation = ({ currentPage, navigate, adminUser, onAdminLogout }) => {
     <nav className="navbar">
       <div className="container">
         <div className="nav-brand">
-          {config.imageLogo && (
+          {config.cloudinary_logo_url && (
             <SafeImage 
-              src={config.imageLogo} 
+              src={config.cloudinary_logo_url} 
               alt="โลโก้" 
               className="nav-logo"
               fallback={<div className="nav-logo-placeholder">🏫</div>}
