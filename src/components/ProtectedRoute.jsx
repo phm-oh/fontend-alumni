@@ -1,7 +1,8 @@
-// src/components/ProtectedRoute.jsx
+// src/components/ProtectedRoute.jsx - Updated to fix white screen
 import React, { useState, useEffect } from 'react';
+import AdminLogin from './AdminLogin';
 
-const ProtectedRoute = ({ children, onNotAuthenticated }) => {
+const ProtectedRoute = ({ children, onNotAuthenticated, onBackToPublic }) => {
   const [loading, setLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
@@ -58,10 +59,19 @@ const ProtectedRoute = ({ children, onNotAuthenticated }) => {
   }
 
   if (!authenticated) {
-    if (onNotAuthenticated) {
-      onNotAuthenticated();
-    }
-    return null;
+    // ✅ แก้ตรงนี้: แทนที่จะ return null ให้แสดง AdminLogin
+    return (
+      <AdminLogin 
+        onLogin={(user) => {
+          setUser(user);
+          setAuthenticated(true);
+          if (onNotAuthenticated) {
+            onNotAuthenticated();
+          }
+        }}
+        onBackToPublic={onBackToPublic || (() => window.location.href = '/')}
+      />
+    );
   }
 
   // Clone children and pass user data
