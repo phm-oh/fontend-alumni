@@ -40,3 +40,38 @@
 .read-the-docs {
   color: #888;
 }
+
+.clickable-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.clickable-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+/* Footer Link Styles */
+.footer-link {
+  color: #FFFFFF;  /* สีขาวสำหรับพื้นเข้ม */
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #FFD700;  /* สีทองเมื่อ hover */
+  text-decoration: underline;
+}
+
+.footer-link:visited {
+  color: #E6E6FA;  /* สีอ่อนๆ สำหรับลิงก์ที่เยี่ยมแล้ว */
+}
+
+/* Clickable Card Styles (bonus) */
+.clickable-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.clickable-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}

@@ -1,4 +1,4 @@
-// src/App.jsx - Complete Main Application
+// src/App.jsx - Complete Main Application with Updated Footer
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import './styles/App.css';
 
@@ -122,7 +122,7 @@ const Navigation = ({ currentPage, navigate, adminUser, onAdminLogout }) => {
   );
 };
 
-// Footer Component
+// Footer Component - Updated with Links
 const Footer = () => (
   <footer className="footer">
     <div className="container">
@@ -136,14 +136,14 @@ const Footer = () => (
         <div className="footer-section">
           <h4>ติดต่อเรา</h4>
           <p>โทร: {config.collegePhone}</p>
-          <p>อีเมล: alumni@utc.ac.th</p>
-          <p>เว็บไซต์: www.udvc.ac.th</p>
+          <p>อีเมล: <a href="mailto:alumni2@udvc.ac.th" className="footer-link" style={{color: '#FFFFFF'}} >alumni2@udvc.ac.th</a></p>
+          <p>เว็บไซต์: <a href="https://www.udvc.ac.th" target="_blank" rel="noopener noreferrer" className="footer-link" style={{color: '#FFFFFF'}}>www.udvc.ac.th</a></p>
         </div>
         <div className="footer-section">
           <h4>ลิงก์ที่เป็นประโยชน์</h4>
-          <p>เว็บไซต์วิทยาลัย</p>
-          <p>Facebook Page</p>
-          <p>ระบบจัดการสมาชิก</p>
+          <p><a href="https://www.udvc.ac.th" target="_blank" rel="noopener noreferrer" className="footer-link" style={{color: '#FFFFFF'}}>เว็บไซต์วิทยาลัย</a></p>
+          <p><a href="https://www.facebook.com/UDVCrcheewaudon/?locale=th_TH" target="_blank" rel="noopener noreferrer" className="footer-link" style={{color: '#FFFFFF'}} >Facebook Page</a></p>
+          
         </div>
       </div>
       <div className="footer-bottom">

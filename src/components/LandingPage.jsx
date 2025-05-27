@@ -1,4 +1,4 @@
-// src/components/LandingPage.jsx - Landing Page Component
+// src/components/LandingPage.jsx - Landing Page with Clickable Cards
 import React from "react";
 import { config } from "../utils/config";
 import SafeImage from "./SafeImage";
@@ -46,11 +46,18 @@ const LandingPage = ({ onNavigate }) => {
             ชมรมศิษย์เก่าวิทยาลัยอาชีวศึกษาอุดรธานี
           </h2>
           <div className="features-grid">
-            <div className="feature-card">
+            {/* Card 1: ลงทะเบียนออนไลน์ - ให้กดได้ */}
+            <div 
+              className="feature-card clickable-card" 
+              onClick={() => onNavigate("register")}
+              style={{ cursor: 'pointer' }}
+            >
               <div className="feature-icon">🎓</div>
               <h3>ลงทะเบียนออนไลน์</h3>
               <p>ลงทะเบียนเป็นสมาชิกศิษย์เก่าได้ง่ายๆ ผ่านระบบออนไลน์</p>
             </div>
+
+            {/* Card 2: บริจาค - ปกติ */}
             <div className="feature-card">
               <div className="feature-icon">📚💝🙏🎁</div>
               <h3>บริจาค</h3>
@@ -59,12 +66,20 @@ const LandingPage = ({ onNavigate }) => {
                 เครื่องมือในการเรียนการสอน{" "}
               </p>
             </div>
+
+            {/* Card 3: เครือข่ายศิษย์เก่า - ปกติ */}
             <div className="feature-card">
               <div className="feature-icon">🤝</div>
               <h3>เครือข่ายศิษย์เก่า</h3>
               <p>เชื่อมต่อและสร้างเครือข่ายกับศิษย์เก่าคนอื่นๆ</p>
             </div>
-            <div className="feature-card">
+
+            {/* Card 4: ตรวจสอบสถานะ - ให้กดได้ */}
+            <div 
+              className="feature-card clickable-card" 
+              onClick={() => onNavigate("check-status")}
+              style={{ cursor: 'pointer' }}
+            >
               <div className="feature-icon">📊</div>
               <h3>ตรวจสอบสถานะ</h3>
               <p>ตรวจสอบสถานะการลงทะเบียนและการชำระเงินได้ทันที</p>
@@ -78,9 +93,9 @@ const LandingPage = ({ onNavigate }) => {
           <div className="info-content">
             <div className="info-grid">
               <div className="info-card">
-                <h3>ค่าสมาชิกประจำปี</h3>
+                <h3>ค่าสมาชิก</h3>
                 <div className="price">{config.membershipFee} บาท</div>
-                <p>รวมบัตรสมาชิก และสิทธิประโยชน์ต่างๆ</p>
+                <p>รวมลงทะเบียนเป็นสมาชิกชมรมศิษย์เก่า</p>
               </div>
               <div className="info-card">
                 <h3>การจัดส่ง</h3>

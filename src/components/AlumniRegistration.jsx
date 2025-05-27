@@ -273,7 +273,7 @@ const AlumniRegistration = ({ onNavigate }) => {
             <div className="form-group">
               <label>รูปประจำตัว</label>
               <p className="field-description">
-                อัพโหลดรูปถ่ายหน้าตรงชัดเจน สำหรับทำบัตรสมาชิก (ไม่บังคับ)
+                อัพโหลดรูปถ่ายหน้าตรงชัดเจน  (ไม่บังคับ)
               </p>
               <input
                 type="file"
@@ -408,7 +408,7 @@ const AlumniRegistration = ({ onNavigate }) => {
             
             <div className="payment-summary">
               <div className="fee-item">
-                <span>ค่าสมาชิกประจำปี</span>
+                <span>ค่าสมาชิก</span>
                 <span>{config.membershipFee} บาท</span>
               </div>
               {formData.deliveryOption === 'จัดส่งทางไปรษณีย์' && (
