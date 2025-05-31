@@ -1,4 +1,4 @@
-// src/App.jsx - Complete Main Application with Updated Footer
+// src/App.jsx - แก้ชื่อเมนูการจัดส่ง
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import './styles/App.css';
 
@@ -25,7 +25,7 @@ export const useAppContext = () => {
   return context;
 };
 
-// Navigation Component
+// Navigation Component - Enhanced with Shipping Menu (แก้ชื่อ)
 const Navigation = ({ currentPage, navigate, adminUser, onAdminLogout }) => {
   const isAdminPage = currentPage.startsWith('admin');
   
@@ -80,21 +80,67 @@ const Navigation = ({ currentPage, navigate, adminUser, onAdminLogout }) => {
             </>
           )}
 
-          {/* Admin Navigation */}
+          {/* Admin Navigation - Enhanced with Shipping */}
           {isAdminPage && (
             <>
               <button
                 onClick={() => navigate('admin-dashboard')}
                 className={currentPage === 'admin-dashboard' ? 'active' : ''}
               >
-                แดชบอร์ด
+                📊 แดชบอร์ด
               </button>
               <button
                 onClick={() => navigate('admin-alumni')}
                 className={currentPage === 'admin-alumni' ? 'active' : ''}
               >
-                จัดการศิษย์เก่า
+                👥 จัดการศิษย์เก่า
               </button>
+              
+              {/* 🔥 Shipping Dropdown Menu - แก้ชื่อ */}
+              <div className="nav-dropdown">
+                <button
+                  className={currentPage.includes('shipping') || currentPage.includes('bulk') ? 'active' : ''}
+                >
+                  📦 ระบบการจัดส่ง ▼
+                </button>
+                <div className="nav-dropdown-menu">
+                  <button
+                    onClick={() => navigate('admin-shipping-dashboard')}
+                    className={currentPage === 'admin-shipping-dashboard' ? 'active' : ''}
+                  >
+                    📊 แดชบอร์ดการจัดส่ง
+                  </button>
+                  <button
+                    onClick={() => navigate('admin-shipping-queue')}
+                    className={currentPage === 'admin-shipping-queue' ? 'active' : ''}
+                  >
+                    📋 คิวการจัดส่ง
+                  </button>
+                  <button
+                    onClick={() => navigate('admin-shipping-tracker')}
+                    className={currentPage === 'admin-shipping-tracker' ? 'active' : ''}
+                  >
+                    📦 ติดตามการจัดส่ง
+                  </button>
+                  {/* 🔥 แก้ชื่อเมนูตรงนี้ */}
+                  <button
+                    onClick={() => navigate('admin-bulk-shipping')}
+                    className={currentPage === 'admin-bulk-shipping' ? 'active' : ''}
+                  >
+                    📊 จัดการสถานะการจัดส่ง
+                  </button>
+                </div>
+              </div>
+
+              {/* 🔥 Financial Menu (Coming Soon) */}
+              <button
+                onClick={() => navigate('admin-financial')}
+                className={`${currentPage === 'admin-financial' ? 'active' : ''} disabled`}
+                title="กำลังพัฒนา..."
+              >
+                💰 ระบบการเงิน
+              </button>
+
               {adminUser && (
                 <>
                   <span className="admin-user-info">
@@ -143,7 +189,6 @@ const Footer = () => (
           <h4>ลิงก์ที่เป็นประโยชน์</h4>
           <p><a href="https://www.udvc.ac.th" target="_blank" rel="noopener noreferrer" className="footer-link" style={{color: '#FFFFFF'}}>เว็บไซต์วิทยาลัย</a></p>
           <p><a href="https://www.facebook.com/UDVCrcheewaudon/?locale=th_TH" target="_blank" rel="noopener noreferrer" className="footer-link" style={{color: '#FFFFFF'}} >Facebook Page</a></p>
-          
         </div>
       </div>
       <div className="footer-bottom">
@@ -244,6 +289,56 @@ const App = () => {
   // Determine if current page is admin
   const isAdminPage = currentPage.startsWith('admin');
 
+  // 🔥 Render Current Page - Enhanced with Shipping Routes
+  const renderCurrentPage = () => {
+    // Public Pages
+    if (!isAdminPage) {
+      switch (currentPage) {
+        case 'home':
+          return <LandingPage onNavigate={navigate} />;
+        case 'register':
+          return <AlumniRegistration onNavigate={navigate} />;
+        case 'check-status':
+          return <StatusCheck onNavigate={navigate} initialIdCard={registeredIdCard} />;
+        default:
+          return <LandingPage onNavigate={navigate} />;
+      }
+    }
+
+    // 🔥 Admin Pages - All routes go to AdminSystem
+    switch (currentPage) {
+      case 'admin-login':
+      case 'admin-dashboard':
+      case 'admin-alumni':
+      // 🔥 Shipping System Routes
+      case 'admin-shipping-dashboard':
+      case 'admin-shipping-queue':
+      case 'admin-shipping-tracker':
+      case 'admin-bulk-shipping':
+      // 🔥 Financial System Route
+      case 'admin-financial':
+        return (
+          <AdminSystem 
+            currentPage={currentPage}
+            adminUser={adminUser}
+            onLogin={handleAdminLogin}
+            onLogout={handleAdminLogout}
+            navigate={navigate}
+          />
+        );
+      default:
+        return (
+          <AdminSystem 
+            currentPage="admin-dashboard"
+            adminUser={adminUser}
+            onLogin={handleAdminLogin}
+            onLogout={handleAdminLogout}
+            navigate={navigate}
+          />
+        );
+    }
+  };
+
   return (
     <AppContext.Provider value={contextValue}>
       <div className="app">
@@ -257,30 +352,7 @@ const App = () => {
 
         {/* Main Content */}
         <main className="main-content">
-          {/* Public Pages */}
-          {!isAdminPage && (
-            <>
-              {currentPage === 'home' && <LandingPage onNavigate={navigate} />}
-              {currentPage === 'register' && <AlumniRegistration onNavigate={navigate} />}
-              {currentPage === 'check-status' && (
-                <StatusCheck 
-                  onNavigate={navigate} 
-                  initialIdCard={registeredIdCard} 
-                />
-              )}
-            </>
-          )}
-
-          {/* Admin System */}
-          {isAdminPage && (
-            <AdminSystem 
-              currentPage={currentPage}
-              adminUser={adminUser}
-              onLogin={handleAdminLogin}
-              onLogout={handleAdminLogout}
-              navigate={navigate}
-            />
-          )}
+          {renderCurrentPage()}
         </main>
 
         {/* Footer - Show only for public pages */}
