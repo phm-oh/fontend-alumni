@@ -1,45 +1,45 @@
 // src/components/AlumniRegistration.jsx - Alumni Registration Form Component
-import React, { useState } from 'react';
-import { config, mockData } from '../utils/config';
+import React, { useState } from "react";
+import { config, mockData } from "../utils/config";
 
-import { useAppContext } from '../App';
+import { useAppContext } from "../App";
 
 const AlumniRegistration = ({ onNavigate }) => {
   const { setIdCard } = useAppContext();
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    idCard: '',
-    address: '',
-    graduationYear: '',
-    department: '',
-    phone: '',
-    email: '',
-    currentJob: '',
-    workplace: '',
-    facebookId: '',
-    lineId: '',
-    paymentMethod: 'โอนเงิน',
-    deliveryOption: 'รับที่วิทยาลัย',
-    pdpaConsent: false
+    firstName: "",
+    lastName: "",
+    idCard: "",
+    address: "",
+    graduationYear: "",
+    department: "",
+    phone: "",
+    email: "",
+    currentJob: "",
+    workplace: "",
+    facebookId: "",
+    lineId: "",
+    paymentMethod: "โอนเงิน",
+    deliveryOption: "รับที่วิทยาลัย",
+    pdpaConsent: false,
   });
 
   const [profileImage, setProfileImage] = useState(null);
-  const [profilePreview, setProfilePreview] = useState('');
+  const [profilePreview, setProfilePreview] = useState("");
   const [paymentProof, setPaymentProof] = useState(null);
-  const [paymentPreview, setPaymentPreview] = useState('');
+  const [paymentPreview, setPaymentPreview] = useState("");
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
-    
+
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
@@ -49,33 +49,33 @@ const AlumniRegistration = ({ onNavigate }) => {
 
     // Validate file type
     if (!config.allowedFileTypes.includes(file.type)) {
-      alert('กรุณาเลือกไฟล์ JPG, PNG หรือ PDF เท่านั้น');
+      alert("กรุณาเลือกไฟล์ JPG, PNG หรือ PDF เท่านั้น");
       return;
     }
 
     // Validate file size
     if (file.size > config.maxFileSize) {
-      alert('ขนาดไฟล์ต้องไม่เกิน 5MB');
+      alert("ขนาดไฟล์ต้องไม่เกิน 5MB");
       return;
     }
 
-    if (fileType === 'profile') {
+    if (fileType === "profile") {
       setProfileImage(file);
       // Create preview for profile image
-      if (file.type.startsWith('image/')) {
+      if (file.type.startsWith("image/")) {
         const reader = new FileReader();
         reader.onload = (e) => setProfilePreview(e.target.result);
         reader.readAsDataURL(file);
       }
-    } else if (fileType === 'payment') {
+    } else if (fileType === "payment") {
       setPaymentProof(file);
       // Create preview for payment proof
-      if (file.type.startsWith('image/')) {
+      if (file.type.startsWith("image/")) {
         const reader = new FileReader();
         reader.onload = (e) => setPaymentPreview(e.target.result);
         reader.readAsDataURL(file);
       } else {
-        setPaymentPreview('');
+        setPaymentPreview("");
       }
     }
   };
@@ -83,33 +83,41 @@ const AlumniRegistration = ({ onNavigate }) => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.firstName.trim()) newErrors.firstName = 'กรุณากรอกชื่อ';
-    if (!formData.lastName.trim()) newErrors.lastName = 'กรุณากรอกนามสกุล';
-    
+    if (!formData.firstName.trim()) newErrors.firstName = "กรุณากรอกชื่อ";
+    if (!formData.lastName.trim()) newErrors.lastName = "กรุณากรอกนามสกุล";
+
     if (!formData.idCard.trim()) {
-      newErrors.idCard = 'กรุณากรอกเลขบัตรประชาชน';
+      newErrors.idCard = "กรุณากรอกเลขบัตรประชาชน";
     } else if (!/^\d{13}$/.test(formData.idCard)) {
-      newErrors.idCard = 'เลขบัตรประชาชนต้องเป็นตัวเลข 13 หลัก';
+      newErrors.idCard = "เลขบัตรประชาชนต้องเป็นตัวเลข 13 หลัก";
     }
 
-    if (!formData.address.trim()) newErrors.address = 'กรุณากรอกที่อยู่';
-    if (!formData.graduationYear) newErrors.graduationYear = 'กรุณาเลือกปีที่จบ';
-    if (!formData.department) newErrors.department = 'กรุณาเลือกแผนกวิชา';
-    
+    if (!formData.address.trim()) newErrors.address = "กรุณากรอกที่อยู่";
+    if (!formData.graduationYear)
+      newErrors.graduationYear = "กรุณาเลือกปีที่จบ";
+    if (!formData.department) newErrors.department = "กรุณาเลือกแผนกวิชา";
+
     if (!formData.phone.trim()) {
-      newErrors.phone = 'กรุณากรอกเบอร์โทรศัพท์';
+      newErrors.phone = "กรุณากรอกเบอร์โทรศัพท์";
     } else if (!/^0[0-9]{9}$/.test(formData.phone)) {
-      newErrors.phone = 'เบอร์โทรศัพท์ไม่ถูกต้อง';
+      newErrors.phone = "เบอร์โทรศัพท์ไม่ถูกต้อง";
     }
 
-    if (!formData.email.trim()) {
-      newErrors.email = 'กรุณากรอกอีเมล';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'รูปแบบอีเมลไม่ถูกต้อง';
+    // if (!formData.email.trim()) {
+    //   newErrors.email = 'กรุณากรอกอีเมล';
+    // } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    //   newErrors.email = 'รูปแบบอีเมลไม่ถูกต้อง';
+    // }
+
+    if (
+      formData.email.trim() &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+    ) {
+      newErrors.email = "รูปแบบอีเมลไม่ถูกต้อง";
     }
 
     if (!formData.pdpaConsent) {
-      newErrors.pdpaConsent = 'กรุณายินยอมการใช้ข้อมูลส่วนบุคคล';
+      newErrors.pdpaConsent = "กรุณายินยอมการใช้ข้อมูลส่วนบุคคล";
     }
 
     setErrors(newErrors);
@@ -122,70 +130,62 @@ const AlumniRegistration = ({ onNavigate }) => {
     setLoading(true);
 
     try {
-      // Create FormData for file uploads
+      // ✅ Clone form data เพื่อไม่เปลี่ยน state จริง
+      const safeFormData = { ...formData };
+
+      // ✅ Inject mock email ถ้ายังไม่กรอก
+      if (!safeFormData.email || safeFormData.email.trim() === "") {
+        safeFormData.email = "udvc@udvc.ac.th";
+      }
+
+      // ✅ สร้าง FormData สำหรับส่ง backend
       const submitData = new FormData();
-      
-      // Add all form data
-      Object.keys(formData).forEach(key => {
-        submitData.append(key, formData[key]);
+      Object.keys(safeFormData).forEach((key) => {
+        submitData.append(key, safeFormData[key]);
       });
 
-      // Add profile image if exists
+      // ใส่ไฟล์
       if (profileImage) {
-        submitData.append('profileImage', profileImage);
+        submitData.append("profileImage", profileImage);
       }
-
-      // Add payment proof if exists
       if (paymentProof) {
-        submitData.append('paymentProof', paymentProof);
+        submitData.append("paymentProof", paymentProof);
       }
 
-      console.log('Submitting to:', `${config.apiUrl}/api/alumni/register`);
-      
-      // Submit to backend API
+      // ยิง request
       const response = await fetch(`${config.apiUrl}/api/alumni/register`, {
-        method: 'POST',
+        method: "POST",
         body: submitData,
-        // Don't set Content-Type header, browser will set it automatically for FormData
       });
 
       const result = await response.json();
 
       if (response.ok && result.success) {
-        // Show success toast
-        showToast('ลงทะเบียนสำเร็จ! กรุณาตรวจสอบอีเมลของท่าน', 'success');
-        
-        // Navigate to status check with the ID card
-        setIdCard(formData.idCard);
-        onNavigate('check-status');
+        showToast("ลงทะเบียนสำเร็จ! กรุณาตรวจสอบอีเมลของท่าน", "success");
+        setIdCard(formData.idCard); // ใช้ของจริง ไม่ต้องใช้ safe
+        onNavigate("check-status");
       } else {
-        showToast(result.message || 'เกิดข้อผิดพลาดในการลงทะเบียน', 'error');
+        showToast(result.message || "เกิดข้อผิดพลาดในการลงทะเบียน", "error");
       }
     } catch (error) {
-      console.error('Registration Error:', error);
-      
-      // Show error toast
-      if (error.message.includes('fetch')) {
-        showToast('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้', 'error');
-      } else {
-        showToast(`เกิดข้อผิดพลาด: ${error.message}`, 'error');
-      }
+      console.error("Registration Error:", error);
+      showToast("เกิดข้อผิดพลาด: " + error.message, "error");
     } finally {
       setLoading(false);
     }
   };
 
   // Toast notification function
-  const showToast = (message, type = 'info') => {
-    const toast = document.createElement('div');
+  const showToast = (message, type = "info") => {
+    const toast = document.createElement("div");
     toast.className = `toast ${type}`;
-    toast.style.animation = 'slideIn 0.3s ease';
+    toast.style.animation = "slideIn 0.3s ease";
     toast.textContent = message;
-    
+
     document.body.appendChild(toast);
-    
+
     setTimeout(() => {
-      toast.style.animation = 'slideOut 0.3s ease';
+      toast.style.animation = "slideOut 0.3s ease";
       setTimeout(() => {
         if (document.body.contains(toast)) {
           document.body.removeChild(toast);
@@ -194,21 +194,18 @@ const AlumniRegistration = ({ onNavigate }) => {
     }, 4000); // Show for 4 seconds for registration
   };
 
-  const totalAmount = config.membershipFee + (formData.deliveryOption === 'จัดส่งทางไปรษณีย์' ? config.shippingFee : 0);
+  const totalAmount =
+    config.membershipFee +
+    (formData.deliveryOption === "จัดส่งทางไปรษณีย์" ? config.shippingFee : 0);
 
   return (
     <div className="page registration-page">
       <div className="container">
         <div className="page-header">
-          <button 
-            className="btn-back"
-            onClick={() => onNavigate('home')}
-          >
+          <button className="btn-back" onClick={() => onNavigate("home")}>
             ← กลับหน้าหลัก
           </button>
-          <div className="header-logo">
-
-          </div>
+          <div className="header-logo"></div>
           <h1>ลงทะเบียนศิษย์เก่า</h1>
           <h2>{config.collegeName}</h2>
           <p>กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง</p>
@@ -226,9 +223,11 @@ const AlumniRegistration = ({ onNavigate }) => {
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleInputChange}
-                  className={errors.firstName ? 'error' : ''}
+                  className={errors.firstName ? "error" : ""}
                 />
-                {errors.firstName && <span className="error-text">{errors.firstName}</span>}
+                {errors.firstName && (
+                  <span className="error-text">{errors.firstName}</span>
+                )}
               </div>
               <div className="form-group">
                 <label>นามสกุล *</label>
@@ -237,9 +236,11 @@ const AlumniRegistration = ({ onNavigate }) => {
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleInputChange}
-                  className={errors.lastName ? 'error' : ''}
+                  className={errors.lastName ? "error" : ""}
                 />
-                {errors.lastName && <span className="error-text">{errors.lastName}</span>}
+                {errors.lastName && (
+                  <span className="error-text">{errors.lastName}</span>
+                )}
               </div>
             </div>
 
@@ -252,9 +253,11 @@ const AlumniRegistration = ({ onNavigate }) => {
                 onChange={handleInputChange}
                 placeholder="13 หลัก"
                 maxLength="13"
-                className={errors.idCard ? 'error' : ''}
+                className={errors.idCard ? "error" : ""}
               />
-              {errors.idCard && <span className="error-text">{errors.idCard}</span>}
+              {errors.idCard && (
+                <span className="error-text">{errors.idCard}</span>
+              )}
             </div>
 
             <div className="form-group">
@@ -264,26 +267,30 @@ const AlumniRegistration = ({ onNavigate }) => {
                 value={formData.address}
                 onChange={handleInputChange}
                 rows="3"
-                className={errors.address ? 'error' : ''}
+                className={errors.address ? "error" : ""}
               />
-              {errors.address && <span className="error-text">{errors.address}</span>}
+              {errors.address && (
+                <span className="error-text">{errors.address}</span>
+              )}
             </div>
 
             {/* Profile Image Upload */}
             <div className="form-group">
               <label>รูปประจำตัว</label>
               <p className="field-description">
-                อัพโหลดรูปถ่ายหน้าตรงชัดเจน  (ไม่บังคับ)
+                อัพโหลดรูปถ่ายหน้าตรงชัดเจน (ไม่บังคับ)
               </p>
               <input
                 type="file"
                 id="profileImage"
                 accept="image/jpeg,image/png"
-                onChange={(e) => handleFileChange(e, 'profile')}
-                style={{ display: 'none' }}
+                onChange={(e) => handleFileChange(e, "profile")}
+                style={{ display: "none" }}
               />
               <label htmlFor="profileImage" className="file-label">
-                {profileImage ? profileImage.name : 'เลือกรูปประจำตัว (JPG, PNG)'}
+                {profileImage
+                  ? profileImage.name
+                  : "เลือกรูปประจำตัว (JPG, PNG)"}
               </label>
               {profilePreview && (
                 <div className="file-preview">
@@ -303,14 +310,18 @@ const AlumniRegistration = ({ onNavigate }) => {
                   name="graduationYear"
                   value={formData.graduationYear}
                   onChange={handleInputChange}
-                  className={errors.graduationYear ? 'error' : ''}
+                  className={errors.graduationYear ? "error" : ""}
                 >
                   <option value="">เลือกปีที่จบ</option>
-                  {mockData.graduationYears.map(year => (
-                    <option key={year} value={year}>{year}</option>
+                  {mockData.graduationYears.map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
                   ))}
                 </select>
-                {errors.graduationYear && <span className="error-text">{errors.graduationYear}</span>}
+                {errors.graduationYear && (
+                  <span className="error-text">{errors.graduationYear}</span>
+                )}
               </div>
               <div className="form-group">
                 <label>แผนกวิชา *</label>
@@ -318,14 +329,18 @@ const AlumniRegistration = ({ onNavigate }) => {
                   name="department"
                   value={formData.department}
                   onChange={handleInputChange}
-                  className={errors.department ? 'error' : ''}
+                  className={errors.department ? "error" : ""}
                 >
                   <option value="">เลือกแผนกวิชา</option>
-                  {mockData.departments.map(dept => (
-                    <option key={dept} value={dept}>{dept}</option>
+                  {mockData.departments.map((dept) => (
+                    <option key={dept} value={dept}>
+                      {dept}
+                    </option>
                   ))}
                 </select>
-                {errors.department && <span className="error-text">{errors.department}</span>}
+                {errors.department && (
+                  <span className="error-text">{errors.department}</span>
+                )}
               </div>
             </div>
           </div>
@@ -342,20 +357,24 @@ const AlumniRegistration = ({ onNavigate }) => {
                   value={formData.phone}
                   onChange={handleInputChange}
                   placeholder="0xxxxxxxx"
-                  className={errors.phone ? 'error' : ''}
+                  className={errors.phone ? "error" : ""}
                 />
-                {errors.phone && <span className="error-text">{errors.phone}</span>}
+                {errors.phone && (
+                  <span className="error-text">{errors.phone}</span>
+                )}
               </div>
               <div className="form-group">
-                <label>อีเมล *</label>
+                <label>อีเมล (ไม่จำเป็นต้องกรอก)</label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className={errors.email ? 'error' : ''}
+                  className={errors.email ? "error" : ""}
                 />
-                {errors.email && <span className="error-text">{errors.email}</span>}
+                {errors.email && (
+                  <span className="error-text">{errors.email}</span>
+                )}
               </div>
             </div>
 
@@ -405,13 +424,13 @@ const AlumniRegistration = ({ onNavigate }) => {
           {/* Payment Section */}
           <div className="form-section">
             <h2>การชำระเงิน</h2>
-            
+
             <div className="payment-summary">
               <div className="fee-item">
                 <span>ค่าสมาชิก</span>
                 <span>{config.membershipFee} บาท</span>
               </div>
-              {formData.deliveryOption === 'จัดส่งทางไปรษณีย์' && (
+              {formData.deliveryOption === "จัดส่งทางไปรษณีย์" && (
                 <div className="fee-item">
                   <span>ค่าจัดส่ง</span>
                   <span>{config.shippingFee} บาท</span>
@@ -431,7 +450,7 @@ const AlumniRegistration = ({ onNavigate }) => {
                     type="radio"
                     name="paymentMethod"
                     value="โอนเงิน"
-                    checked={formData.paymentMethod === 'โอนเงิน'}
+                    checked={formData.paymentMethod === "โอนเงิน"}
                     onChange={handleInputChange}
                   />
                   <span>โอนเงิน</span>
@@ -441,7 +460,7 @@ const AlumniRegistration = ({ onNavigate }) => {
                     type="radio"
                     name="paymentMethod"
                     value="ชำระด้วยตนเอง"
-                    checked={formData.paymentMethod === 'ชำระด้วยตนเอง'}
+                    checked={formData.paymentMethod === "ชำระด้วยตนเอง"}
                     onChange={handleInputChange}
                   />
                   <span>ชำระด้วยตนเอง</span>
@@ -457,7 +476,7 @@ const AlumniRegistration = ({ onNavigate }) => {
                     type="radio"
                     name="deliveryOption"
                     value="รับที่วิทยาลัย"
-                    checked={formData.deliveryOption === 'รับที่วิทยาลัย'}
+                    checked={formData.deliveryOption === "รับที่วิทยาลัย"}
                     onChange={handleInputChange}
                   />
                   <span>รับที่วิทยาลัย (ฟรี)</span>
@@ -467,7 +486,7 @@ const AlumniRegistration = ({ onNavigate }) => {
                     type="radio"
                     name="deliveryOption"
                     value="จัดส่งทางไปรษณีย์"
-                    checked={formData.deliveryOption === 'จัดส่งทางไปรษณีย์'}
+                    checked={formData.deliveryOption === "จัดส่งทางไปรษณีย์"}
                     onChange={handleInputChange}
                   />
                   <span>จัดส่งทางไปรษณีย์ (+{config.shippingFee} บาท)</span>
@@ -475,7 +494,7 @@ const AlumniRegistration = ({ onNavigate }) => {
               </div>
             </div>
 
-            {formData.paymentMethod === 'โอนเงิน' && (
+            {formData.paymentMethod === "โอนเงิน" && (
               <div className="payment-upload">
                 <h3>ข้อมูลบัญชีสำหรับโอนเงิน</h3>
                 <div className="bank-info">
@@ -499,8 +518,17 @@ const AlumniRegistration = ({ onNavigate }) => {
                     <span className="label">จำนวนเงิน:</span>
                     <span className="amount">{totalAmount} บาท</span>
                   </div>
+                  <div className="bank-detail">
+                    <p className="field-description">
+                      หมายเหตุ : การโอนเงินสำหรับซื้อผลิตภัณฑ์
+                      และสนับสนุนกิจกรรมพัฒนาวิทยาลัยฯ ชื่อบัญชี น.ส.ชุติภัทร
+                      ชวาลไชย และ นางระพีพรรณ จันทรสา เลขที่บัญชี 443-3-30313-5
+                      ธนาคารกรุงไทย สาขาเซ็นทรัลพลาซ่า อุดรธานี
+                      สอบถามเพิ่มเติมที่ 089-9441040 (งานการเงิน)
+                    </p>
+                  </div>
                 </div>
-                
+
                 <div className="file-upload">
                   <h4>อัปโหลดหลักฐานการชำระเงิน</h4>
                   <p className="field-description">
@@ -510,11 +538,13 @@ const AlumniRegistration = ({ onNavigate }) => {
                     type="file"
                     id="paymentProof"
                     accept="image/*,.pdf"
-                    onChange={(e) => handleFileChange(e, 'payment')}
-                    style={{ display: 'none' }}
+                    onChange={(e) => handleFileChange(e, "payment")}
+                    style={{ display: "none" }}
                   />
                   <label htmlFor="paymentProof" className="file-label">
-                    {paymentProof ? paymentProof.name : 'เลือกไฟล์หลักฐาน (JPG, PNG, PDF)'}
+                    {paymentProof
+                      ? paymentProof.name
+                      : "เลือกไฟล์หลักฐาน (JPG, PNG, PDF)"}
                   </label>
                   {paymentPreview && (
                     <div className="file-preview">
@@ -537,20 +567,23 @@ const AlumniRegistration = ({ onNavigate }) => {
                   onChange={handleInputChange}
                 />
                 <span>
-                  ข้าพเจ้ายินยอมให้สมาคมศิษย์เก่าใช้ข้อมูลส่วนบุคคลเพื่อวัตถุประสงค์ในการติดต่อสื่อสารและกิจกรรมของสมาคม *
+                  ข้าพเจ้ายินยอมให้สมาคมศิษย์เก่าใช้ข้อมูลส่วนบุคคลเพื่อวัตถุประสงค์ในการติดต่อสื่อสารและกิจกรรมของสมาคม
+                  *
                 </span>
               </label>
-              {errors.pdpaConsent && <span className="error-text">{errors.pdpaConsent}</span>}
+              {errors.pdpaConsent && (
+                <span className="error-text">{errors.pdpaConsent}</span>
+              )}
             </div>
           </div>
 
           <div className="form-actions">
-            <button 
+            <button
               className="btn btn-primary btn-large"
               disabled={loading}
               onClick={handleSubmit}
             >
-              {loading ? 'กำลังลงทะเบียน...' : 'ลงทะเบียน'}
+              {loading ? "กำลังลงทะเบียน..." : "ลงทะเบียน"}
             </button>
           </div>
         </div>

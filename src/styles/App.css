@@ -1953,9 +1953,9 @@ textarea:focus,
 
 .payment-proof img {
   width: 100%;
-  max-width: 400px;
-  height: 256px;
-  object-fit: cover;
+  max-width: 300px;
+  height: 330px;
+  object-fit:fill;
   border-radius: var(--border-radius);
   cursor: pointer;
   border: 2px solid var(--border-color);
@@ -2000,37 +2000,39 @@ textarea:focus,
   color: var(--text-muted);
 }
 
-/* Image Modal */
 .image-modal-backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: rgba(0, 0, 0, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 2000;
-  padding: var(--spacing-md);
 }
 
 .image-modal-container {
   position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
+  max-width: 40vw;
+  max-height: 80vh;
+  overflow: auto;
+  background: #fff;
+  border-radius: 8px;
+  padding: 1rem;
 }
 
+/* ปุ่มปิด */
 .image-modal-close {
   position: absolute;
-  top: -40px;
-  right: 0;
-  background: none;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 4rem;
+  border-radius: 50px;
+  
+  background: rgb(56, 55, 55);
   border: none;
-  color: var(--text-white);
-  font-size: 2rem;
+  color: #d2cccc;
   cursor: pointer;
-  transition: opacity 0.3s ease;
+  z-index: 9999; /* ให้ลอยอยู่เหนือรูปแน่นอน */
 }
 
 .image-modal-close:hover {
@@ -2038,10 +2040,11 @@ textarea:focus,
 }
 
 .image-modal-img {
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 70%;
+  height: auto;
   object-fit: contain;
-  border-radius: var(--border-radius);
+  display: block;
+  margin: 0 auto;
 }
 
 /* Admin Navigation (Fixed) */
@@ -2875,27 +2878,10 @@ textarea:focus,
   margin-top: var(--spacing-lg);
 }
 
-.payment-proof img {
-  width: 100%;
-  max-width: 400px;
-  height: 256px;
-  object-fit: cover;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  border: 2px solid var(--border-color);
-  transition: all 0.3s ease;
-}
 
-.payment-proof img:hover {
-  border-color: var(--primary-color);
-  transform: scale(1.02);
-}
 
-.payment-proof-hint {
-  font-size: var(--font-size-sm);
-  color: var(--text-muted);
-  margin-top: var(--spacing-sm);
-}
+
+
 
 /* History Section */
 .history-list {
@@ -2924,49 +2910,7 @@ textarea:focus,
   color: var(--text-muted);
 }
 
-/* Image Modal */
-.image-modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-  padding: var(--spacing-md);
-}
 
-.image-modal-container {
-  position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
-}
-
-.image-modal-close {
-  position: absolute;
-  top: -40px;
-  right: 0;
-  background: none;
-  border: none;
-  color: var(--text-white);
-  font-size: 2rem;
-  cursor: pointer;
-  transition: opacity 0.3s ease;
-}
-
-.image-modal-close:hover {
-  opacity: 0.7;
-}
-
-.image-modal-img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  border-radius: var(--border-radius);
-}
 
 /* Admin Navigation (Fixed) - ใหม่ */
 .admin-nav-fixed {
