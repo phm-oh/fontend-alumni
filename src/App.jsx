@@ -175,7 +175,7 @@ const Footer = () => (
       <div className="footer-content">
         <div className="footer-section">
           <h3>{config.collegeName}</h3>
-          <p>สมาคมศิษย์เก่า</p>
+          <p>ชมรมศิษย์เก่าวิทยาลัยอาชีวศึกษาอุดรธานี</p>
           <p>{config.collegeAddress}</p>
           <p>โทร: {config.collegePhone}</p>
         </div>
@@ -312,6 +312,7 @@ const App = () => {
       case 'admin-alumni':
       // 🔥 Shipping System Routes
       case 'admin-shipping-dashboard':
+      case 'admin-shipping-reports':  
       case 'admin-shipping-queue':
       case 'admin-shipping-tracker':
       case 'admin-bulk-shipping':

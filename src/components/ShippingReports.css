@@ -1,0 +1,363 @@
+/* 📁 ShippingReports.css */
+
+.shipping-reports-container {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+/* Header Section */
+.page-header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.page-title {
+  color: #1976d2 !important;
+  font-weight: bold !important;
+  margin-bottom: 8px !important;
+}
+
+/* Statistics Cards */
+.stats-grid {
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  border-radius: 12px !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  border-left: 4px solid !important;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.stat-card.warning {
+  border-left-color: #ed6c02 !important;
+}
+
+.stat-card.info {
+  border-left-color: #0288d1 !important;
+}
+
+.stat-card.success {
+  border-left-color: #2e7d32 !important;
+}
+
+.stat-card.primary {
+  border-left-color: #1976d2 !important;
+}
+
+.stat-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stat-icon {
+  font-size: 2.5rem !important;
+  opacity: 0.8;
+}
+
+.stat-card.warning .stat-icon {
+  color: #ed6c02 !important;
+}
+
+.stat-card.info .stat-icon {
+  color: #0288d1 !important;
+}
+
+.stat-card.success .stat-icon {
+  color: #2e7d32 !important;
+}
+
+.stat-card.primary .stat-icon {
+  color: #1976d2 !important;
+}
+
+/* Filter Card */
+.filter-card {
+  margin-bottom: 24px;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid #e0e0e0;
+}
+
+.search-icon {
+  color: #666 !important;
+  margin-right: 8px;
+}
+
+/* Export Card */
+.export-card {
+  margin-bottom: 24px;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid #e0e0e0;
+}
+
+.export-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.export-btn {
+  border-radius: 8px !important;
+  padding: 10px 20px !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  min-width: 200px;
+}
+
+.export-btn.primary {
+  background-color: #1976d2 !important;
+  color: white !important;
+}
+
+.export-btn.success {
+  background-color: #2e7d32 !important;
+  color: white !important;
+}
+
+.export-btn.info {
+  border-color: #0288d1 !important;
+  color: #0288d1 !important;
+}
+
+.export-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Table Card */
+.table-card {
+  border-radius: 12px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid #e0e0e0;
+}
+
+.table-container {
+  border-radius: 8px !important;
+  max-height: 600px;
+}
+
+.table-container .MuiTableHead-root {
+  background-color: #f8f9fa !important;
+}
+
+.table-container .MuiTableHead-root .MuiTableCell-head {
+  background-color: #f8f9fa !important;
+  font-weight: 600 !important;
+  color: #333 !important;
+  border-bottom: 2px solid #e0e0e0 !important;
+}
+
+.table-container .MuiTableRow-hover:hover {
+  background-color: #f5f5f5 !important;
+}
+
+.name-cell {
+  min-width: 160px !important;
+}
+
+/* Status Chips */
+.status-chip {
+  font-weight: 500 !important;
+  border-radius: 16px !important;
+}
+
+/* Loading */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 40px;
+  color: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .shipping-reports-container {
+    padding: 16px;
+  }
+  
+  .export-buttons {
+    flex-direction: column;
+  }
+  
+  .export-btn {
+    min-width: 100%;
+  }
+  
+  .stat-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+  
+  .table-container {
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid .MuiGrid-item {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .page-title {
+    font-size: 1.75rem !important;
+  }
+  
+  .stat-icon {
+    font-size: 2rem !important;
+  }
+}
+
+/* Custom Scrollbar for Table */
+.table-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Animation for Cards */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.shipping-reports-container > * {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.shipping-reports-container > *:nth-child(1) { animation-delay: 0.1s; }
+.shipping-reports-container > *:nth-child(2) { animation-delay: 0.2s; }
+.shipping-reports-container > *:nth-child(3) { animation-delay: 0.3s; }
+.shipping-reports-container > *:nth-child(4) { animation-delay: 0.4s; }
+.shipping-reports-container > *:nth-child(5) { animation-delay: 0.5s; }
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .shipping-reports-container {
+    background-color: #4d603a;
+    color: white;
+  }
+  
+  .stat-card,
+  .filter-card,
+  .export-card,
+  .table-card {
+    background-color: #4a4848 !important;
+    border-color: #333 !important;
+  }
+  
+  .table-container .MuiTableHead-root .MuiTableCell-head {
+    background-color: #504e4e !important;
+    color: white !important;
+  }
+}
+
+
+
+  .stat-card,
+  .filter-card,
+  .export-card,
+  .table-card {
+    background-color: #e9dede !important; /* เพิ่ม contrast จากเดิม #1e1e1e */
+    border-color: #444 !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4) !important;
+  }
+
+  .table-container .MuiTableHead-root .MuiTableCell-head {
+    background-color: #e9e3e3 !important;
+    color: #303030 !important;
+  }
+
+  .search-icon {
+    color: #555353 !important;
+  }
+
+  input {
+    background-color: #d9d1d1 !important;
+    color: #3d3a14 !important;
+    border: 1px solid #555 !important;
+    max-width: 30rem;
+
+  .export-btn {
+    background-color: #333 !important;
+    color: #f0f0f0 !important;
+    border: 1px solid #555 !important;
+  }
+
+  .export-btn.primary {
+    background-color: #2196f3 !important;
+  }
+
+  .export-btn.success {
+    background-color: #4caf50 !important;
+  }
+
+  .export-btn.info {
+    color: #29b6f6 !important;
+    border-color: #29b6f6 !important;
+  }
+
+  .stat-icon {
+    color: #fff !important;
+    opacity: 0.95;
+  }
+
+  .table-container .MuiTableRow-hover:hover {
+    background-color: #2f2f2f !important;
+  }
+
+
+
+
+
+/* Print Styles */
+@media print {
+  .shipping-reports-container {
+    background-color: white !important;
+    padding: 0;
+  }
+  
+  .export-card,
+  .filter-card {
+    display: none !important;
+  }
+  
+  .stat-card,
+  .table-card {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
+}}

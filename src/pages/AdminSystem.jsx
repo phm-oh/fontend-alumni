@@ -1,4 +1,4 @@
-// src/pages/AdminSystem.jsx - Complete Admin System (Updated with Shipping)
+// src/pages/AdminSystem.jsx - Complete Admin System (Updated with ShippingReports)
 import React, { useState } from 'react';
 
 // Import Admin Components ที่เราทำไว้แล้ว
@@ -14,6 +14,9 @@ import ShippingQueue from '../components/ShippingQueue';
 import ShippingTracker from '../components/ShippingTracker';
 import BulkShipping from '../components/BulkShipping';
 import LabelPrinter from '../components/LabelPrinter';
+
+// 🚀 เพิ่มใหม่: Import ShippingReports
+import ShippingReports from '../components/ShippingReports';
 
 const AdminSystem = ({ currentPage, adminUser, onLogin, onLogout, navigate }) => {
   const [selectedAlumniId, setSelectedAlumniId] = useState(null);
@@ -96,6 +99,7 @@ const AdminSystem = ({ currentPage, adminUser, onLogin, onLogout, navigate }) =>
             <AdminDashboard 
               user={adminUser}
               onLogout={onLogout}
+              onNavigate={navigate}  // เพิ่ม onNavigate
             />
           </ProtectedRoute>
         );
@@ -116,6 +120,14 @@ const AdminSystem = ({ currentPage, adminUser, onLogin, onLogout, navigate }) =>
         return (
           <ProtectedRoute onNotAuthenticated={() => onLogin(null)}>
             <ShippingDashboard {...commonProps} />
+          </ProtectedRoute>
+        );
+
+      // 🚀 เพิ่มใหม่: ShippingReports
+      case 'admin-shipping-reports':
+        return (
+          <ProtectedRoute onNotAuthenticated={() => onLogin(null)}>
+            <ShippingReports {...commonProps} />
           </ProtectedRoute>
         );
 
@@ -201,6 +213,7 @@ const AdminSystem = ({ currentPage, adminUser, onLogin, onLogout, navigate }) =>
               <AdminDashboard 
                 user={adminUser}
                 onLogout={onLogout}
+                onNavigate={navigate}  // เพิ่ม onNavigate
               />
             </ProtectedRoute>
           );
@@ -272,6 +285,13 @@ const AdminSystem = ({ currentPage, adminUser, onLogin, onLogout, navigate }) =>
             >
               📦 แดชบอร์ดการจัดส่ง
             </button>
+            {/* 🚀 เพิ่มปุ่มรายงานการจัดส่ง */}
+            <button
+              onClick={() => navigate('admin-shipping-reports')}
+              className={`admin-nav-btn ${currentPage === 'admin-shipping-reports' ? 'active' : ''}`}
+            >
+              📊 รายงานการจัดส่ง
+            </button>
             <button
               onClick={() => navigate('admin-shipping-queue')}
               className={`admin-nav-btn ${currentPage === 'admin-shipping-queue' ? 'active' : ''}`}
@@ -319,6 +339,13 @@ const AdminSystem = ({ currentPage, adminUser, onLogin, onLogout, navigate }) =>
               className="admin-nav-btn quick-action"
             >
               📦 อัปเดตการจัดส่ง
+            </button>
+            {/* 🚀 เพิ่มปุ่มด่วนสำหรับรายงาน */}
+            <button
+              onClick={() => navigate('admin-shipping-reports')}
+              className="admin-nav-btn quick-action"
+            >
+              📊 รายงานการจัดส่ง
             </button>
           </div>
         </div>

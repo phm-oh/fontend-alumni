@@ -94,7 +94,7 @@ const AlumniRegistration = ({ onNavigate }) => {
 
     if (!formData.address.trim()) newErrors.address = "กรุณากรอกที่อยู่";
     if (!formData.graduationYear)
-      newErrors.graduationYear = "กรุณาเลือกปีที่จบ";
+      newErrors.graduationYear = "กรุณาเลือกปีที่การศึกษา";
     if (!formData.department) newErrors.department = "กรุณาเลือกแผนกวิชา";
 
     if (!formData.phone.trim()) {
@@ -305,14 +305,14 @@ const AlumniRegistration = ({ onNavigate }) => {
             <h2>ข้อมูลการศึกษา</h2>
             <div className="form-grid">
               <div className="form-group">
-                <label>ปีที่จบ *</label>
+                <label>ปีที่จบการศึกษา *</label>
                 <select
                   name="graduationYear"
                   value={formData.graduationYear}
                   onChange={handleInputChange}
                   className={errors.graduationYear ? "error" : ""}
                 >
-                  <option value="">เลือกปีที่จบ</option>
+                  <option value="">เลือกปีที่จบการศึกษา</option>
                   {mockData.graduationYears.map((year) => (
                     <option key={year} value={year}>
                       {year}
