@@ -81,18 +81,20 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     
     steps:
-      # 🚀 Trigger deployment on server
-      - name: Deploy to Server
-        uses: appleboy/ssh-action@v0.1.10
+      # 🔑 Set up SSH Key
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.7.0
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
+          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+
+      # 🚀 Deploy to Server
+      - name: Deploy Frontend to Server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
             echo "🎨 Deploying Alumni Frontend..."
             
             # Navigate to deployment directory
-            cd /opt/alumni-deploy || exit 1
+            cd /home/oem/alumni-deploy || exit 1
             
             # Login to GHCR
             echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -103,13 +105,13 @@ jobs:
             
             # Restart frontend container
             echo "🔄 Restarting frontend container..."
-            docker-compose pull alumni-frontend
-            docker-compose up -d alumni-frontend
+            docker-compose -f docker-compose.prod.yml pull alumni-frontend
+            docker-compose -f docker-compose.prod.yml up -d alumni-frontend
             
             # Health check
             echo "🩺 Checking frontend health..."
             sleep 15
-            if curl -f http://localhost:80/health; then
+            if curl -f http://localhost:3000/health; then
               echo "✅ Frontend deployment successful!"
             else
               echo "❌ Frontend health check failed!"
@@ -121,6 +123,7 @@ jobs:
             docker image prune -f
             
             echo "🎉 Frontend deployment completed!"
+          EOF
 
   # ===== Notification Job =====
   notify:
